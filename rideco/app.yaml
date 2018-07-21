@@ -1,0 +1,11 @@
+# [START runtime]
+runtime: python
+env: flex
+entrypoint: gunicorn -b :$PORT rideco.wsgi
+
+beta_settings:
+    cloud_sql_instances: stefanno-trial:us-central1:ridecodb
+
+runtime_config:
+  python_version: 3.5
+# [END runtime]

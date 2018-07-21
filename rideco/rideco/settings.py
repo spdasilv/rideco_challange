@@ -25,7 +25,7 @@ SECRET_KEY = 'c%*h+_k3^^0xa6zhil3=hzfwm35ft+g9qy(+e&#ib2(0_d#_&r'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -75,18 +75,16 @@ WSGI_APPLICATION = 'rideco.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'OPTIONS': {
-        },
         'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': '',
+        'PASSWORD': 'password',
         'PORT': '5432',
     }
 }
 # In the flexible environment, you connect to CloudSQL using a unix socket.
 # Locally, you can use the CloudSQL proxy to proxy a localhost connection
 # to the instance
-DATABASES['default']['HOST'] = 'localhost'
+DATABASES['default']['HOST'] = '/cloudsql/stefanno-trial:us-central1:ridecodb'
 if os.getenv('GAE_INSTANCE'):
     pass
 else:
@@ -128,4 +126,5 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/https://storage.googleapis.com/rideco/static/'
+STATIC_ROOT = 'C:/Users/Stefanno/Desktop/RideCo/Static/static/'
