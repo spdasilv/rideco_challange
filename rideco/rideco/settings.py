@@ -77,14 +77,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 'password',
+        'PASSWORD': '',
         'PORT': '5432',
     }
 }
 # In the flexible environment, you connect to CloudSQL using a unix socket.
 # Locally, you can use the CloudSQL proxy to proxy a localhost connection
 # to the instance
-DATABASES['default']['HOST'] = '/cloudsql/stefanno-trial:us-central1:ridecodb'
+DATABASES['default']['HOST'] = 'localhost'
 if os.getenv('GAE_INSTANCE'):
     pass
 else:
@@ -127,4 +127,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/https://storage.googleapis.com/rideco/static/'
-STATIC_ROOT = 'C:/Users/Stefanno/Desktop/RideCo/Static/static/'
+STATIC_ROOT = '/static/'
