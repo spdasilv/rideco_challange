@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New List</title>
+</head>
+<body>
+<label>Title: </label> <input type="text" name="title" id="list_title">
+<table id="grocery_list">
+    <col width="100">
+    <col width="50">
+
+    <tr>
+        <th>Item</th>
+        <th>Quantity</th>
+    </tr>
+</table>
+<input type="button" value="Add Item" onclick="addRow()" />
+
+{% csrf_token %}
+<form method='post' id ='createList'>
+    <input type='submit' value='Create List'/>
+</form>
+</body>
+</html>
+{% load static %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#createList").submit(function(event){
+            event.preventDefault();
+            var grocery_list = [];
+            var title = $('#list_title').val()
+
+            $( '#grocery_list tr' ).each(function() {
+                var item_name = $(this).find('.item_name').val();
+                var item_quantity = $(this).find('.item_quantity').val();
+
+                if (item_name && item_quantity) {
+                    grocery_list.push({
+                        item_name: item_name,
+                        item_quantity: item_quantity
+                    })
+                }
+            });
+            $.ajax({
+                 type:"POST",
+                 url:"{% url 'groceries:createList' %}",
+                 data: JSON.stringify({
+                     "title" : title,
+                     "grocery_list" : grocery_list
+                 }),
+                 success: function(result){
+                    if (result['response'] == 'success') {
+                        window.location.replace("{% url 'groceries:index' %}");
+                    }
+                     console.log(result)
+                 }
+            });
+            return false;
+        });
+    });
+
+    function addRow() {
+        $('#grocery_list tr:last').after('<tr class="grocery_item"><th><input type="text" class="item_name"/></th><th><input type="number" class="item_quantity"/></th></tr>');
+    }
+</script>

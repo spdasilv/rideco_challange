@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Grocery Lists</title>
+</head>
+
+<body>
+
+<h1>Select a list to view its contents</h1>
+{% if grocery_lists %}
+    <ul>
+    {% for list in grocery_lists %}
+        <li><a href="{% url 'groceries:list' list.id %}">{{ list.list_name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No lists available.</p>
+{% endif %}
+</br>
+<a href="/groceries/create"><b>Create New List</b></a>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ lists.list_name }}</title>
+</head>
+<body>
+<h1>{{ lists.list_name }}</h1>
+<table id="grocery_list">
+    <col width="10">
+    <col width="100">
+    <col width="50">
+
+    <tr>
+        <th>ID</th>
+        <th>Item</th>
+        <th>Quantity</th>
+    </tr>
+
+    {% if list_items %}
+        {% for item in list_items %}
+            <tr class="grocery_item">
+                <th class="item_id">{{ item.id }}</th>
+                <th><input type="text" class="item_name" value="{{ item.item_name }}"/></th>
+                <th><input type="number" class="item_quantity" value="{{ item.quantity }}"/></th>
+            </tr>
+        {% endfor %}
+    {% endif %}
+</table>
+
+{% csrf_token %}
+<form method='post' id ='updateList'>
+    <input type='submit' value='Update List'/>
+</form>
+
+{% if list_items %}
+{% else %}
+    <p>Empty list.</p>
+{% endif %}
+</body>
+</html>
+{% load static %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#updateList").submit(function(event){
+            event.preventDefault();
+            var grocery_list = [];
+
+            $( '#grocery_list tr' ).each(function() {
+                var item_name = $(this).find('.item_name').val();
+                var item_quantity = $(this).find('.item_quantity').val();
+                var item_id = $(this).find('.item_id').html();
+                if (item_name && item_quantity) {
+                    grocery_list.push({
+                        item_id: item_id,
+                        item_name: item_name,
+                        item_quantity: item_quantity
+                    })
+                }
+            });
+            $.ajax({
+                 type:"POST",
+                 url:"{% url 'groceries:updateList' %}",
+                 data: JSON.stringify({
+                     "grocery_list" : grocery_list
+                 }),
+                 success: function(result){
+                    if (result['response'] == 'success') {
+                        window.location.replace("{% url 'groceries:index' %}");
+                    }
+                     console.log(result)
+                 }
+            });
+            return false;
+        });
+    });
+</script>
